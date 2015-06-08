@@ -24,7 +24,31 @@ class Mcgs extends CI_Model
 	{	
 		$this->cgs_db->select('*');
 		$this->cgs_db->from('vehicle_gd');
-		$this->cgs_db->where('hphm', $data['hphm']);
+		$this->cgs_db->where('hphm', $data->hphm);
+		switch (@$data->hpys) {
+			case 'blue':
+			case '蓝':
+			case '2':
+				$this->cgs_db->where_in('hpzl', ['02', '08']);
+				break;
+			case 'yellow':
+			case '黄':
+			case '3':
+				$this->cgs_db->where_in('hpzl', ['01', '07', '13', '14', '15', '16', '17']);
+				break;
+			case 'white':
+			case '白':
+			case '4':
+				$this->cgs_db->where_in('hpzl', ['20', '21', '22', '24', '32']);
+				break;
+			case 'black':
+			case '黑':
+			case '5':
+				$this->cgs_db->where_in('hpzl', ['03', '04', '05', '06', '09', '10', '11', '12']);
+				break;
+			default:
+				break;
+		}
 		return $this->cgs_db->get();
 	}
 
