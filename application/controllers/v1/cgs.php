@@ -31,22 +31,24 @@ class Cgs extends REST_Controller
      */
     function vehicles_get()
     {
-        $p = $this->input->get('p');
-        if (!$p) {
+        $data = $this->input->get(NULL, True);
+
+        if (empty(@$data['q'])) {
             $e = [array('resource'=>'Search', 'field'=>'q', 'code'=>'missing')];
             $this->response(array('message' => 'Validation Failed', 'errors' => $e), 422);
         }
-
-        foreach (explode(' ', $p) as $id => $r) {
-            if ($id == 0) {
-                $data['hphm'] = $r;
-            } else {
-                $p_arr = explode(':', $r);
-                $data[$p_arr[0]] = $p_arr[1];
+        $q = @json_decode($data['q']);
+        if (empty($q)) {
+            $e = [array('resource'=>'Search', 'field'=>'q', 'code'=>'invalid')];
+            $this->response(array('message' => 'Body should be a JSON object', 'errors' => $e), 422);
+        } else {
+            if (empty(@$q->hphm)) {
+                $e = [array('resource'=>'Search', 'field'=>'q.hphm', 'code'=>'missing')];
+                $this->response(array('message' => 'Validation Failed', 'errors' => $e), 422);
             }
         }
-        $result = $this->Mcgs->getVehicle($data);
 
+        $result = $this->Mcgs->getVehicle($q);
         if ($result) {
             $this->response(array('total_count'=> $result->num_rows(),
                                   'items'=> $result->result_array()), 200); // 200 being the HTTP response code
