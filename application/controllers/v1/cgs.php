@@ -31,18 +31,18 @@ class Cgs extends REST_Controller
      */
     function vehicles_get()
     {
-        $data = $this->input->get(NULL, True);
+        $data = $this->input->get(NULL, true);
 
         if (empty(@$data['q'])) {
             $e = [array('resource'=>'Search', 'field'=>'q', 'code'=>'missing')];
             $this->response(array('message' => 'Validation Failed', 'errors' => $e), 422);
         }
-        $q = @json_decode($data['q']);
+        $q = @json_decode($data['q'], true);
         if (empty($q)) {
             $e = [array('resource'=>'Search', 'field'=>'q', 'code'=>'invalid')];
             $this->response(array('message' => 'Body should be a JSON object', 'errors' => $e), 422);
         } else {
-            if (empty(@$q->hphm)) {
+            if (empty(@$q['hphm'])) {
                 $e = [array('resource'=>'Search', 'field'=>'q.hphm', 'code'=>'missing')];
                 $this->response(array('message' => 'Validation Failed', 'errors' => $e), 422);
             }
