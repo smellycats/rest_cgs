@@ -27,9 +27,10 @@ class Index extends CI_Controller
      * 
      * @return json
      */
-    function index()
+    public function index()
     {
-        $url_array = ['cgs_url' => site_url('cgs/vehicles?q={query}')];
+        $url_array = ['v1_url' => site_url('v1'),
+                      'v2_url' => site_url('v2')];
         echo json_encode($url_array, true);
     }
 
