@@ -29,8 +29,10 @@ class Index extends CI_Controller
      */
     public function index()
     {
-        $url_array = ['v1_url' => site_url('v1'),
-                      'v2_url' => site_url('v2')];
+        $url_array = [
+            'v1_url' => site_url('v1'),
+            'v2_url' => site_url('v2')
+        ];
         echo json_encode($url_array, true);
     }
 
