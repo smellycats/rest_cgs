@@ -32,8 +32,8 @@ class Parsing_Controller extends REST_Controller
      */
      private function _getParams()
      {
-        $query_str = urldecode(str_replace('+','%2B',$_SERVER["QUERY_STRING"]));
-        return h_convertUrlQuery($query_str);
+        $query_str = urldecode(str_replace('+', '%2B', $_SERVER["QUERY_STRING"]));
+        return h_convert_url_query($query_str);
      }
 
  }
