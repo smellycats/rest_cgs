@@ -17,10 +17,10 @@ class Mcgs extends CI_Model
     /**
      * 根据条件查询车辆信息
      * 
-     * @param array $data 查询数组
+     * @param array $q 查询数组
      * @return object
      */
-	public function getVehicle($data)
+	public function getVehicle($q)
 	{	
 		$this->cgs_db->select('id');
 		$this->cgs_db->select('hpzl');
@@ -36,7 +36,12 @@ class Mcgs extends CI_Model
 		$this->cgs_db->select('syr');
 		$this->cgs_db->select('fzrq');
 		$this->cgs_db->from('vehicle_gd');
-		$this->cgs_db->where('hphm', $data['hphm']);
+		$this->cgs_db->where('hphm', $q['hphm']);
+		// 号牌种类查询
+		if (isset($q['hpzl'])) {
+			$this->cgs_db->where('hpzl', $q['hpzl']);
+		}
+		// 号牌颜色查询
 		if (isset($q['hpys'])) {
 			switch ($q['hpys']) {
 				case 'blue':
@@ -78,8 +83,9 @@ class Mcgs extends CI_Model
 	public function getHpzl()
 	{	
 		$this->cgs_db->select('hpzl.*');
-		$this->cgs_db->select('hpys.color');
-		$this->cgs_db->join('hpys', 'hpys.id = hpzl.color_id');
+		$this->cgs_db->select('hpys.name as hpys');
+		$this->cgs_db->select('hpys.code as hpys_code');
+		$this->cgs_db->join('hpys', 'hpys.code = hpzl.hpys_code');
 		return $this->cgs_db->get('hpzl');
 	}
 
