@@ -22,6 +22,8 @@ class Example extends REST_Controller
     {
         // Construct our parent class
         parent::__construct();
+
+        $this->load->helper('cgs');
         
         // Configure limits on our controller methods. Ensure
         // you have created the 'limits' table and enabled 'limits'
@@ -105,4 +107,23 @@ class Example extends REST_Controller
 	{
 		var_dump($this->put('foo'));
 	}
+
+    public function test_get()
+    {
+        $str = str_replace('+','%2B',$_SERVER["QUERY_STRING"]);
+        $newstr= urldecode($str);
+        $param = explode('&', $_SERVER["QUERY_STRING"]);
+        $arr = parse_url($_SERVER["QUERY_STRING"]);
+        var_dump($arr);
+        $qu = h_convertUrlQuery($newstr);
+        var_dump($qu);
+        $q_parts = $qu['q'];
+        $q_arr = h_convertParam($q_parts);
+        echo $q_arr['q'];
+
+
+        var_dump($_GET['q']);
+    }
+
+
 }
