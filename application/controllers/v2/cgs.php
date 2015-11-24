@@ -22,7 +22,7 @@ class Cgs extends Parsing_Controller
 
         $this->load->helper('url');
 
-        header('Cache-Control:public, max-age=60, s-maxage=60');
+        #header('Cache-Control:public, max-age=60, s-maxage=60');
         header('Content-Type: application/json; charset=utf-8');
         header("HTTP/1.1 200 OK");
     }
@@ -61,29 +61,40 @@ class Cgs extends Parsing_Controller
     {
         $query = $this->Mcgs->getHpzl();
         $result = array();
-        foreach($query->result() as $row) {
-            $result[$row->code] = array('name'=>$row->name, 'ps'=>$row->remark, 'hpys'=>$row->color);
+        foreach($query->result_array() as $row) {
+            $result[$row['code']] = array(
+                'name' => $row['name'],
+                'hpys' => $row['hpys'],
+                'hpys_code' => $row['hpys_code'],
+                'ps' => $row['remark']
+            );
         }
 
         $this->response($result, 200);
     }
 
     /**
-     * hpzl list
-     * 号牌种类列表
-     * 
+     * get hpzl
+     * 获取号牌种类列表
+     *
      * @return json
      */
     public function hpzl_get()
     {
         $query = $this->Mcgs->getHpzl();
-        $result = array();
-        foreach($query->result() as $id=>$row) {
-            $result[$id] = array('id'=>(int)$row->id, 'code' => $row->code, 'name' => $row->name, 'ps' => $row->remark, 'hpys'=>$row->color);
+        $items = array();
+        foreach($query->result_array() as $id => $row) {
+            $items[$id] = array(
+                'id' => (int)$row['id'],
+                'code' => $row['code'],
+                'name' => $row['name'],
+                'hpys' => $row['hpys'],
+                'hpys_code' => $row['hpys_code'],
+                'ps'=> $row['remark']
+            );
         }
-        header("HTTP/1.1 200 OK");
-        header('Content-Type: application/json');
-        echo json_encode(array('total_count' => $query->num_rows(), 'items' => $result));
+
+        echo json_encode(array('total_count' => $query->num_rows(), 'items' => $items));
     }
 
     /**
@@ -99,8 +110,6 @@ class Cgs extends Parsing_Controller
         foreach($query->result() as $id=>$row) {
             $result[$id] = array('id'=>(int)$row->id, 'code'=>$row->code, 'name'=>$row->name);
         }
-        header("HTTP/1.1 200 OK");
-        header('Content-Type: application/json');
         echo json_encode(array('total_count' => $query->num_rows(), 'items' => $result));
     }
 
