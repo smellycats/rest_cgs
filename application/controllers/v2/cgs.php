@@ -21,9 +21,10 @@ class Cgs extends Parsing_Controller
         $this->load->model('Mcgs');
 
         $this->load->helper('url');
-        $this->load->helper('cgs');
 
         header('Cache-Control:public, max-age=60, s-maxage=60');
+        header('Content-Type: application/json; charset=utf-8');
+        header("HTTP/1.1 200 OK");
     }
 
     /**
@@ -44,8 +45,6 @@ class Cgs extends Parsing_Controller
         $query = $this->Mcgs->getVehicle($q_arr);
         
         if ($query) {
-            header("HTTP/1.1 200 OK");
-            header('Content-Type: application/json');
             echo json_encode(array('total_count'=> $query->num_rows(), 'items'=> $query->result_array()));
         } else {
             $this->response(array('message' => 'Database error'), 500);
